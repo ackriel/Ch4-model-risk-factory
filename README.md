@@ -38,6 +38,8 @@ The client is a fictional Tier-1 UK retail bank. All data is public: the correct
 
 ## Setup on a Mac (step by step)
 
+**Shortcut:** in Finder, double-click **`setup_mac.command`** once (it creates the environment, installs everything, builds the models and runs the tests; output is saved to `setup_log.txt`). After that, double-click **`start_dashboard.command`** whenever you want the dashboard. If macOS blocks it the first time, right-click the file → **Open** → **Open**. The manual steps below do the same thing.
+
 You need **Python 3.11 or newer**. R is optional: without it, the Redevelop agent uses the recorded outputs of a genuine R run, which are committed in `legacy_models/artifacts/`.
 
 1. **Check Python.** Open VS Code, then *Terminal → New Terminal*, and type:

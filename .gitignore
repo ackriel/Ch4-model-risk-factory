@@ -6,3 +6,4 @@ __pycache__/
 .env
 outputs/llm_cache/
 .streamlit/secrets.toml
+setup_log.txt
