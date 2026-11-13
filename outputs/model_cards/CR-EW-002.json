@@ -2,7 +2,7 @@
   "model_id": "CR-EW-002",
   "model_name": "Early-Warning Default Decision Tree",
   "status": "DRAFT - requires human review",
-  "generated_at": "2026-11-13T11:47:33Z",
+  "generated_at": "2026-11-13T14:46:05Z",
   "facts": {
     "source": "extracted",
     "owner": "Collections Strategy",

@@ -2,7 +2,7 @@
   "model_id": "CR-BH-004",
   "model_name": "Behavioural Credit Score (Existing Customers)",
   "status": "DRAFT - requires human review",
-  "generated_at": "2026-11-13T11:47:33Z",
+  "generated_at": "2026-11-13T14:46:05Z",
   "facts": {
     "source": "extracted",
     "owner": "Retail Credit Risk Analytics",

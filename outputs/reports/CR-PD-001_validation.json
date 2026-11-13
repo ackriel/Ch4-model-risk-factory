@@ -2,7 +2,7 @@
   "model_id": "CR-PD-001",
   "model_name": "Retail Unsecured Loan Application Scorecard (PD)",
   "validated": true,
-  "generated_at": "2026-11-13T11:47:34Z",
+  "generated_at": "2026-11-13T14:46:07Z",
   "scores_source": {
     "train": "redeveloped_models/CR-PD-001_python_train_scores.csv",
     "test": "redeveloped_models/CR-PD-001_python_test_scores.csv"

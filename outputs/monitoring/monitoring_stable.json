@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-13T11:40:47Z",
+  "generated_at": "2026-11-13T14:45:10Z",
   "scenario": "stable",
-  "severity": 0,
+  "severity": 0.0,
   "batch_size": 400,
   "note": "SIMULATED production batch. Outcomes are known only because this is a simulation; in production, default outcomes arrive 12+ months later, so AUC monitoring lags.",
   "models": {

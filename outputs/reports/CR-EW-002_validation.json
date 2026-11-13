@@ -2,7 +2,7 @@
   "model_id": "CR-EW-002",
   "model_name": "Early-Warning Default Decision Tree",
   "validated": true,
-  "generated_at": "2026-11-13T11:47:33Z",
+  "generated_at": "2026-11-13T14:46:06Z",
   "scores_source": {
     "train": "legacy_models/artifacts/CR-EW-002_train_scores.csv",
     "test": "legacy_models/artifacts/CR-EW-002_test_scores.csv"
@@ -394,7 +394,7 @@
     {
       "severity": "Medium",
       "area": "Calibration",
-      "finding": "Hosmer-Lemeshow p-value 0 < 0.05: predicted PDs do not match observed default rates."
+      "finding": "Hosmer-Lemeshow p-value < 0.001 (below 0.05): predicted PDs do not match observed default rates."
     },
     {
       "severity": "Medium",

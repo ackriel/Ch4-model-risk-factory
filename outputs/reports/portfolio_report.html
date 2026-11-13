@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Model estate health report</title>
+<style>
+  body { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: #1c2733; margin: 0; background: #f4f6f9; }
+  header { background: #0b2545; color: #fff; padding: 24px 40px; }
+  header h1 { margin: 0 0 4px; font-size: 22px; }
+  header p { margin: 0; opacity: .8; font-size: 13px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 24px 40px 60px; }
+  section { background: #fff; border-radius: 8px; padding: 20px 24px; margin-bottom: 18px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  h2 { font-size: 17px; margin: 0 0 12px; color: #0b2545; border-bottom: 2px solid #e6ebf1; padding-bottom: 6px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid #e6ebf1; vertical-align: top; }
+  th { background: #f4f6f9; }
+  .tiles { display: flex; gap: 12px; flex-wrap: wrap; }
+  .tile { flex: 1; min-width: 140px; border-radius: 8px; padding: 12px 16px; color: #fff; }
+  .tile b { display: block; font-size: 28px; }
+  .tile span { font-size: 12px; opacity: .9; }
+  .st { display: inline-block; padding: 3px 10px; border-radius: 10px; color: #fff; font-weight: 600; font-size: 12px; white-space: nowrap; }
+  .FAILING { background: #c62828; } .BLOCKED { background: #6a1b9a; } .NEEDS-ATTENTION { background: #ef8f00; }
+  .PENDING { background: #8a96a3; } .OK { background: #2e7d32; }
+  .RED { color: #c62828; font-weight: 600; } .AMBER { color: #ef8f00; font-weight: 600; } .GREEN { color: #2e7d32; font-weight: 600; }
+  .ALERT { color: #c62828; font-weight: 600; } .WARN { color: #ef8f00; font-weight: 600; }
+  ul { margin: 0; padding-left: 18px; } li { margin-bottom: 2px; }
+  .note { font-size: 12px; color: #5b6b7c; }
+  .lang td.num { text-align: center; } .zero { color: #c4ccd5; }
+  pre { white-space: pre-wrap; font-family: inherit; font-size: 12px; color: #5b6b7c; margin: 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Model estate health report</h1>
+  <p>4 models · generated 2026-11-13T14:46:16Z by the Model Risk Factory ·
+     stages: discover = approved, document = approved, redevelop = approved, validate = approved, monitor = approved
+      · monitoring scenario: drift (severity 0.6)</p>
+</header>
+<main>
+
+<section>
+  <h2>Estate at a glance</h2>
+  <div class="tiles">
+    
+    <div class="tile FAILING"><b>3</b><span>Failing</span></div>
+    
+    <div class="tile BLOCKED"><b>1</b><span>Blocked</span></div>
+    
+    <div class="tile NEEDS-ATTENTION"><b>0</b><span>Needs Attention</span></div>
+    
+    <div class="tile PENDING"><b>0</b><span>Pending</span></div>
+    
+    <div class="tile OK"><b>0</b><span>OK</span></div>
+    
+  </div>
+</section>
+
+<section>
+  <h2>By language: is a specific R, Python or SAS model failing?</h2>
+  <table class="lang">
+    <tr><th>Language</th><th style="text-align:center">Failing</th><th style="text-align:center">Blocked</th><th style="text-align:center">Needs Attention</th><th style="text-align:center">Pending</th><th style="text-align:center">OK</th></tr>
+    
+    <tr><td><b>Python</b></td><td class="num ">2</td><td class="num zero">0</td><td class="num zero">0</td><td class="num zero">0</td><td class="num zero">0</td></tr>
+    
+    <tr><td><b>R</b></td><td class="num ">1</td><td class="num zero">0</td><td class="num zero">0</td><td class="num zero">0</td><td class="num zero">0</td></tr>
+    
+    <tr><td><b>SAS</b></td><td class="num zero">0</td><td class="num ">1</td><td class="num zero">0</td><td class="num zero">0</td><td class="num zero">0</td></tr>
+    
+  </table>
+</section>
+
+<section>
+  <h2>Every model, worst first</h2>
+  <table>
+    <tr><th>Status</th><th>Model</th><th>Language</th><th>Documented</th><th>Parity</th><th>Validation</th><th>Test AUC</th><th>Monitoring</th><th>Why</th></tr>
+    
+    <tr>
+      <td><span class="st FAILING">FAILING</span></td>
+      <td><b>CR-EW-002</b><br>Early-Warning Default Decision Tree<br><span class="note">Decision tree (scikit-learn) · Tier 2 · Collections Strategy</span></td>
+      <td>Python</td>
+      <td>Yes<br><span class="note">old docs: 5.4 yrs</span></td>
+      <td>n/a</td>
+      <td class="AMBER">AMBER<br><span class="note">0 high · 7 medium</span></td>
+      <td>0.706</td>
+      <td class="ALERT">ALERT</td>
+      <td><ul><li>Monitoring ALERT (score PSI 0.53): re-validation required</li><li>Validation AMBER (7 medium-severity findings)</li><li>Original documentation 5.4 years old; new draft model card needs owner sign-off</li></ul>
+          <span class="note">Details: CR-EW-002_validation_report.html</span></td>
+    </tr>
+    
+    <tr>
+      <td><span class="st FAILING">FAILING</span></td>
+      <td><b>CR-PD-001</b><br>Retail Unsecured Loan Application Scorecard (PD)<br><span class="note">Logistic regression (GLM, binomial/logit) · Tier 1 · Retail Credit Risk Analytics</span></td>
+      <td>R</td>
+      <td>Yes<br><span class="note">old docs: 7.7 yrs</span></td>
+      <td>PASS</td>
+      <td class="AMBER">AMBER<br><span class="note">0 high · 7 medium</span></td>
+      <td>0.757</td>
+      <td class="ALERT">ALERT</td>
+      <td><ul><li>Monitoring ALERT (score PSI 0.19): re-validation required</li><li>Validation AMBER (7 medium-severity findings)</li><li>Original documentation 7.7 years old; new draft model card needs owner sign-off</li></ul>
+          <span class="note">Details: CR-PD-001_validation_report.html</span></td>
+    </tr>
+    
+    <tr>
+      <td><span class="st FAILING">FAILING</span></td>
+      <td><b>CR-PR-003</b><br>Risk-Based Pricing Gradient Boosting Model<br><span class="note">Gradient boosting (scikit-learn) · Tier 1 · Pricing & Product Analytics</span></td>
+      <td>Python</td>
+      <td>Yes<br><span class="note">old docs: 4.0 yrs</span></td>
+      <td>n/a</td>
+      <td class="AMBER">AMBER<br><span class="note">0 high · 6 medium</span></td>
+      <td>0.791</td>
+      <td class="ALERT">ALERT</td>
+      <td><ul><li>Monitoring ALERT (score PSI 0.31): re-validation required</li><li>Validation AMBER (6 medium-severity findings)</li><li>Original documentation 4.0 years old; new draft model card needs owner sign-off</li></ul>
+          <span class="note">Details: CR-PR-003_validation_report.html</span></td>
+    </tr>
+    
+    <tr>
+      <td><span class="st BLOCKED">BLOCKED</span></td>
+      <td><b>CR-BH-004</b><br>Behavioural Credit Score (Existing Customers)<br><span class="note">Logistic regression (SAS PROC LOGISTIC) · Tier 1 · Retail Credit Risk Analytics</span></td>
+      <td>SAS<br><span class="note">not executable</span></td>
+      <td>Yes<br><span class="note">old docs: 9.5 yrs</span></td>
+      <td>n/a</td>
+      <td class="not run">not run</td>
+      <td>-</td>
+      <td class="not monitored">not monitored</td>
+      <td><ul><li>Cannot be executed in the factory: Not executable here (no SAS licence) - documentation only</li><li>Original documentation 9.5 years old; new draft model card needs owner sign-off</li></ul>
+          </td>
+    </tr>
+    
+  </table>
+</section>
+
+<section>
+  <h2>Top findings per model</h2>
+  <table>
+    <tr><th>Model</th><th>High / medium findings (rule-based)</th></tr>
+    
+    <tr><td><b>CR-EW-002</b></td><td><ul><li>[Medium] Hosmer-Lemeshow p-value < 0.001 (below 0.05): predicted PDs do not match observed default rates.</li><li>[Medium] Mean predicted PD is 1.56x the observed default rate.</li><li>[Medium] Age band = 'under 25': approval-rate ratio 0.19 vs '25 and over' (screen 0.8).</li><li>[Medium] Age band = 'under 25': good customers approved 21% less often than in '25 and over'.</li></ul></td></tr>
+    
+    <tr><td><b>CR-PD-001</b></td><td><ul><li>[Medium] Age band = 'under 25': approval-rate ratio 0.55 vs '25 and over' (screen 0.8).</li><li>[Medium] Age band = 'under 25': good customers approved 12% less often than in '25 and over'.</li><li>[Medium] Personal status & sex = 'female : non-single or male : single': approval-rate ratio 0.56 vs 'male : married/widowed' (screen 0.8).</li><li>[Medium] Personal status & sex = 'female : non-single or male : single': good customers approved 17% less often than in 'male : married/widowed'.</li></ul></td></tr>
+    
+    <tr><td><b>CR-PR-003</b></td><td><ul><li>[Medium] Train/test AUC gap of 0.174 suggests overfitting.</li><li>[Medium] Age band = 'under 25': approval-rate ratio 0.42 vs '25 and over' (screen 0.8).</li><li>[Medium] Age band = 'under 25': good customers approved 26% less often than in '25 and over'.</li><li>[Medium] Personal status & sex = 'female : non-single or male : single': approval-rate ratio 0.63 vs 'male : married/widowed' (screen 0.8).</li></ul></td></tr>
+    
+  </table>
+</section>
+
+<section>
+  <h2>How the status is decided</h2>
+  <table><tr><th>Status</th><th>Rule (most severe applies)</th></tr>
+  <tr><td><span class="st FAILING">FAILING</span></td><td>Validation rating RED, R->Python parity FAILED, or a monitoring ALERT</td></tr><tr><td><span class="st BLOCKED">BLOCKED</span></td><td>The model cannot be executed in the factory, so no validation evidence exists</td></tr><tr><td><span class="st NEEDS-ATTENTION">NEEDS ATTENTION</span></td><td>Validation rating AMBER, a monitoring WARN, or stale documentation</td></tr><tr><td><span class="st PENDING">PENDING</span></td><td>The stages needed to judge the model have not run yet</td></tr><tr><td><span class="st OK">OK</span></td><td>Validated GREEN with no monitoring warnings</td></tr>
+  </table>
+  <p class="note">All statuses come from deterministic rules applied to computed results. No AI is involved in this page.
+  This report supports, but does not replace, human model risk review, and it does not by itself demonstrate compliance with PRA SS1/23.</p>
+</section>
+</main>
+</body>
+</html>

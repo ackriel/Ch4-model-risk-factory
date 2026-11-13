@@ -8,13 +8,14 @@
   python main.py run monitor --scenario drift --severity 0.6
   python main.py run-all --reviewer "Jane Doe"            # interactive approvals
   python main.py run-all --reviewer "CI" --auto-approve   # testing only, logged as automated
+  python main.py portfolio                     # rebuild the estate health report
   python main.py reset                         # clear stage statuses (outputs are kept)
 """
 import argparse
 import json
 import sys
 
-from core import config, pipeline, state
+from core import config, pipeline, portfolio, state
 
 
 def main(argv=None) -> int:
@@ -23,6 +24,7 @@ def main(argv=None) -> int:
     sub.add_parser("setup")
     sub.add_parser("status")
     sub.add_parser("reset")
+    sub.add_parser("portfolio")
     r = sub.add_parser("run")
     r.add_argument("stage", choices=config.PIPELINE_STAGES)
     r.add_argument("--actor")
@@ -46,6 +48,13 @@ def main(argv=None) -> int:
             info = st["stages"][s]
             rev = info.get("review", {})
             print(f"{s:<10} {info['status']:<12} {rev.get('reviewer', '')} {rev.get('comment', '')}")
+    elif args.cmd == "portfolio":
+        p = portfolio.build()
+        if p is None:
+            print("Run the discover stage first.")
+            return 1
+        print(json.dumps({"status_counts": p["status_counts"], "by_language": p["by_language"]}, indent=2))
+        print("Report: outputs/reports/portfolio_report.html")
     elif args.cmd == "reset":
         state.reset()
         print("Pipeline state reset.")

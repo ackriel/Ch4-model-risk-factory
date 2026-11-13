@@ -57,6 +57,20 @@ def test_full_pipeline(isolated_outputs):
     assert (config.REPORTS_DIR / "CR-PD-001_validation_report.html").exists()
     mon = json.loads((config.MONITORING_DIR / "latest.json").read_text())
     assert mon["scenario"] == "drift" and mon["alerts"]
+    port = json.loads((config.REPORTS_DIR / "portfolio.json").read_text())
+    status = {r["model_id"]: r["status"] for r in port["models"]}
+    assert status["CR-BH-004"] == "BLOCKED"                       # SAS cannot be run
+    assert port["by_language"]["SAS"]["BLOCKED"] == 1
+    assert all(status[m] == "FAILING" for m in ["CR-PD-001", "CR-EW-002", "CR-PR-003"])  # drift alerts
+    assert (config.REPORTS_DIR / "portfolio_report.html").exists()
+
+
+def test_portfolio_pending_before_validation(isolated_outputs):
+    from core import portfolio
+    assert portfolio.build(write=False) is None                    # nothing discovered yet
+    pipeline.run_stage("discover", actor="t")
+    p = portfolio.build(write=False)
+    assert p["status_counts"]["PENDING"] == 3 and p["status_counts"]["BLOCKED"] == 1
 
 
 def test_recorded_r_outputs_used_when_r_missing(isolated_outputs, monkeypatch):

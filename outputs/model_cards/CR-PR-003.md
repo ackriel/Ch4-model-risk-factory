@@ -1,6 +1,6 @@
 # Model card: Risk-Based Pricing Gradient Boosting Model (CR-PR-003)
 
-> **DRAFT - requires human review** - generated 2026-11-13T11:47:33Z by the Document agent.
+> **DRAFT - requires human review** - generated 2026-11-13T14:46:05Z by the Document agent.
 
 ## Facts (extracted from source code)
 

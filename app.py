@@ -15,7 +15,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 from agents import discover, document, monitor, redevelop, validate
-from core import config, data, impact, llm, pipeline, state
+from core import config, data, impact, llm, pipeline, portfolio, state
 
 st.set_page_config(page_title="Model Risk Factory", page_icon="🏦", layout="wide")
 
@@ -28,6 +28,8 @@ st.markdown("""
   .pill {display:inline-block; padding:2px 10px; border-radius:10px; font-size:.78rem; font-weight:600; color:#fff;}
   .not_started {background:#8a96a3;} .completed {background:#1f6fb2;} .approved {background:#2e7d32;}
   .rejected {background:#c62828;} .failed {background:#c62828;}
+  .FAILING {background:#c62828;} .BLOCKED {background:#6a1b9a;} .NEEDS-ATTENTION {background:#ef8f00;}
+  .PENDING {background:#8a96a3;} .OK {background:#2e7d32;}
   .RED {background:#c62828;} .AMBER {background:#ef8f00;} .GREEN {background:#2e7d32;}
   .src {font-size:.72rem; padding:1px 8px; border-radius:4px; background:#e3f2e6; color:#1b5e20;}
   .src.ai {background:#fde7c8; color:#8a4b00;}
@@ -55,7 +57,7 @@ with st.sidebar:
     st.caption("Fictional UK bank · prototype")
     reviewer = st.text_input("Reviewer name (for approvals)", value=st.session_state.get("reviewer", ""))
     st.session_state["reviewer"] = reviewer
-    page = st.radio("Navigate", ["Overview", "Model inventory", "Documentation", "Redevelopment",
+    page = st.radio("Navigate", ["Overview", "Estate health", "Model inventory", "Documentation", "Redevelopment",
                                  "Validation", "Monitoring", "Approvals & audit trail"])
     st.divider()
     st.markdown("**Pipeline status**")
@@ -168,6 +170,41 @@ if page == "Overview":
                f"~{imp['estate_person_years']['with_factory']:.0f} with the factory. {imp['caveat']}")
     with st.expander("Dataset"):
         st.json(data.describe())
+
+elif page == "Estate health":
+    header("Estate health", "One verdict per model - which R, Python or SAS models are failing, blocked or need attention")
+    p = portfolio.build()
+    if p is None:
+        st.info("Run the Discover stage first (Model inventory page).")
+    else:
+        st.markdown(src_label("rule-based on computed results - no AI"), unsafe_allow_html=True)
+        cols = st.columns(len(portfolio.STATUS_ORDER))
+        for c, s_ in zip(cols, portfolio.STATUS_ORDER):
+            c.metric("OK" if s_ == "OK" else s_.title(), p["status_counts"][s_])
+        st.markdown("**By language**")
+        st.dataframe(pd.DataFrame(p["by_language"]).T.rename_axis("Language")[portfolio.STATUS_ORDER],
+                     width="stretch")
+        st.markdown("**Every model, worst first**")
+        for r in p["models"]:
+            with st.container(border=True):
+                c1, c2 = st.columns([1.1, 3])
+                c1.markdown(f"{pill(r['status'], r['status'].replace(' ', '-'))}<br>**{r['model_id']}** · {r['language']}"
+                            f"<br><span style='font-size:.85rem'>{r['model_name']}</span>", unsafe_allow_html=True)
+                c2.markdown(f"Validation **{r['validation_rating']}**"
+                            + (f" · AUC {r['test_auc']:.3f}" if r["test_auc"] is not None else "")
+                            + f" · Parity {r['parity']} · Monitoring **{r['monitoring_status']}**"
+                            + f" · Documented: {'yes' if r['documented'] else 'no'}")
+                if r["reasons"]:
+                    c2.markdown("\n".join(f"- {x}" for x in r["reasons"]))
+        with st.expander("How the status is decided"):
+            st.dataframe(pd.DataFrame({"Status": list(p["status_rules"]), "Rule": list(p["status_rules"].values())}),
+                         hide_index=True, width="stretch")
+        html_file = config.REPORTS_DIR / "portfolio_report.html"
+        if html_file.exists():
+            st.download_button("Download estate health report (HTML)", html_file.read_text(),
+                               "portfolio_report.html", mime="text/html")
+            with st.expander("Preview HTML report"):
+                components.html(html_file.read_text(), height=900, scrolling=True)
 
 elif page == "Model inventory":
     header("Model inventory", "Stage 1 - the Discover agent scans legacy code (R, Python, SAS) without executing it")

@@ -2,7 +2,7 @@
   "model_id": "CR-PR-003",
   "model_name": "Risk-Based Pricing Gradient Boosting Model",
   "validated": true,
-  "generated_at": "2026-11-13T11:47:34Z",
+  "generated_at": "2026-11-13T14:46:07Z",
   "scores_source": {
     "train": "legacy_models/artifacts/CR-PR-003_train_scores.csv",
     "test": "legacy_models/artifacts/CR-PR-003_test_scores.csv"

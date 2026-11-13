@@ -57,7 +57,8 @@ def findings_for(model: dict, perf_test: dict, perf_train: dict, stab: dict,
         add("Medium", "Performance", f"Train/test AUC gap of {gap:.3f} suggests overfitting.")
     hl = perf_test["hosmer_lemeshow"]
     if hl["p_value"] < 0.05:
-        add("Medium", "Calibration", f"Hosmer-Lemeshow p-value {hl['p_value']:.3g} < 0.05: "
+        p_txt = "< 0.001" if hl["p_value"] < 0.001 else f"{hl['p_value']:.3f}"
+        add("Medium", "Calibration", f"Hosmer-Lemeshow p-value {p_txt} (below 0.05): "
             "predicted PDs do not match observed default rates.")
     ratio = perf_test["mean_predicted_pd"] / max(perf_test["default_rate"], 1e-9)
     if abs(ratio - 1) > 0.20:

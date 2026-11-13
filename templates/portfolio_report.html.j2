@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Model estate health report</title>
+<style>
+  body { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: #1c2733; margin: 0; background: #f4f6f9; }
+  header { background: #0b2545; color: #fff; padding: 24px 40px; }
+  header h1 { margin: 0 0 4px; font-size: 22px; }
+  header p { margin: 0; opacity: .8; font-size: 13px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 24px 40px 60px; }
+  section { background: #fff; border-radius: 8px; padding: 20px 24px; margin-bottom: 18px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  h2 { font-size: 17px; margin: 0 0 12px; color: #0b2545; border-bottom: 2px solid #e6ebf1; padding-bottom: 6px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid #e6ebf1; vertical-align: top; }
+  th { background: #f4f6f9; }
+  .tiles { display: flex; gap: 12px; flex-wrap: wrap; }
+  .tile { flex: 1; min-width: 140px; border-radius: 8px; padding: 12px 16px; color: #fff; }
+  .tile b { display: block; font-size: 28px; }
+  .tile span { font-size: 12px; opacity: .9; }
+  .st { display: inline-block; padding: 3px 10px; border-radius: 10px; color: #fff; font-weight: 600; font-size: 12px; white-space: nowrap; }
+  .FAILING { background: #c62828; } .BLOCKED { background: #6a1b9a; } .NEEDS-ATTENTION { background: #ef8f00; }
+  .PENDING { background: #8a96a3; } .OK { background: #2e7d32; }
+  .RED { color: #c62828; font-weight: 600; } .AMBER { color: #ef8f00; font-weight: 600; } .GREEN { color: #2e7d32; font-weight: 600; }
+  .ALERT { color: #c62828; font-weight: 600; } .WARN { color: #ef8f00; font-weight: 600; }
+  ul { margin: 0; padding-left: 18px; } li { margin-bottom: 2px; }
+  .note { font-size: 12px; color: #5b6b7c; }
+  .lang td.num { text-align: center; } .zero { color: #c4ccd5; }
+  pre { white-space: pre-wrap; font-family: inherit; font-size: 12px; color: #5b6b7c; margin: 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Model estate health report</h1>
+  <p>{{ p.n_models }} models · generated {{ p.generated_at }} by the Model Risk Factory ·
+     stages: {% for s, v in p.stages.items() %}{{ s }} = {{ v }}{% if not loop.last %}, {% endif %}{% endfor %}
+     {% if p.monitoring_scenario %} · monitoring scenario: {{ p.monitoring_scenario.scenario }} (severity {{ p.monitoring_scenario.severity }}){% endif %}</p>
+</header>
+<main>
+
+<section>
+  <h2>Estate at a glance</h2>
+  <div class="tiles">
+    {% for s in order %}
+    <div class="tile {{ s|replace(' ', '-') }}"><b>{{ p.status_counts[s] }}</b><span>{{ "OK" if s == "OK" else s|title }}</span></div>
+    {% endfor %}
+  </div>
+</section>
+
+<section>
+  <h2>By language: is a specific R, Python or SAS model failing?</h2>
+  <table class="lang">
+    <tr><th>Language</th>{% for s in order %}<th style="text-align:center">{{ "OK" if s == "OK" else s|title }}</th>{% endfor %}</tr>
+    {% for lang, counts in p.by_language.items() %}
+    <tr><td><b>{{ lang }}</b></td>{% for s in order %}<td class="num {{ 'zero' if counts[s] == 0 }}">{{ counts[s] }}</td>{% endfor %}</tr>
+    {% endfor %}
+  </table>
+</section>
+
+<section>
+  <h2>Every model, worst first</h2>
+  <table>
+    <tr><th>Status</th><th>Model</th><th>Language</th><th>Documented</th><th>Parity</th><th>Validation</th><th>Test AUC</th><th>Monitoring</th><th>Why</th></tr>
+    {% for r in p.models %}
+    <tr>
+      <td><span class="st {{ r.status|replace(' ', '-') }}">{{ r.status }}</span></td>
+      <td><b>{{ r.model_id }}</b><br>{{ r.model_name }}<br><span class="note">{{ r.methodology }} · {{ r.risk_tier }} · {{ r.owner }}</span></td>
+      <td>{{ r.language }}{% if not r.executable %}<br><span class="note">not executable</span>{% endif %}</td>
+      <td>{{ "Yes" if r.documented else "No" }}{% if r.documentation_age_years %}<br><span class="note">old docs: {{ r.documentation_age_years }} yrs</span>{% endif %}</td>
+      <td>{{ r.parity }}</td>
+      <td class="{{ r.validation_rating }}">{{ r.validation_rating }}{% if r.high_findings or r.medium_findings %}<br><span class="note">{{ r.high_findings }} high · {{ r.medium_findings }} medium</span>{% endif %}</td>
+      <td>{{ "%.3f"|format(r.test_auc) if r.test_auc is not none else "-" }}</td>
+      <td class="{{ r.monitoring_status }}">{{ r.monitoring_status }}</td>
+      <td>{% if r.reasons %}<ul>{% for x in r.reasons %}<li>{{ x }}</li>{% endfor %}</ul>{% else %}-{% endif %}
+          {% if r.report_file %}<span class="note">Details: {{ r.report_file }}</span>{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</section>
+
+<section>
+  <h2>Top findings per model</h2>
+  <table>
+    <tr><th>Model</th><th>High / medium findings (rule-based)</th></tr>
+    {% for r in p.models %}{% if r.top_findings %}
+    <tr><td><b>{{ r.model_id }}</b></td><td><ul>{% for f in r.top_findings %}<li>{{ f }}</li>{% endfor %}</ul></td></tr>
+    {% endif %}{% endfor %}
+  </table>
+</section>
+
+<section>
+  <h2>How the status is decided</h2>
+  <table><tr><th>Status</th><th>Rule (most severe applies)</th></tr>
+  {% for s in order %}<tr><td><span class="st {{ s|replace(' ', '-') }}">{{ s }}</span></td><td>{{ p.status_rules[s] }}</td></tr>{% endfor %}
+  </table>
+  <p class="note">All statuses come from deterministic rules applied to computed results. No AI is involved in this page.
+  This report supports, but does not replace, human model risk review, and it does not by itself demonstrate compliance with PRA SS1/23.</p>
+</section>
+</main>
+</body>
+</html>

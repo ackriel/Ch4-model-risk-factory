@@ -1,0 +1,168 @@
+{
+  "generated_at": "2026-11-13T14:46:16Z",
+  "n_models": 4,
+  "status_counts": {
+    "FAILING": 3,
+    "BLOCKED": 1,
+    "NEEDS ATTENTION": 0,
+    "PENDING": 0,
+    "OK": 0
+  },
+  "by_language": {
+    "Python": {
+      "FAILING": 2,
+      "BLOCKED": 0,
+      "NEEDS ATTENTION": 0,
+      "PENDING": 0,
+      "OK": 0
+    },
+    "R": {
+      "FAILING": 1,
+      "BLOCKED": 0,
+      "NEEDS ATTENTION": 0,
+      "PENDING": 0,
+      "OK": 0
+    },
+    "SAS": {
+      "FAILING": 0,
+      "BLOCKED": 1,
+      "NEEDS ATTENTION": 0,
+      "PENDING": 0,
+      "OK": 0
+    }
+  },
+  "stages": {
+    "discover": "approved",
+    "document": "approved",
+    "redevelop": "approved",
+    "validate": "approved",
+    "monitor": "approved"
+  },
+  "monitoring_scenario": {
+    "scenario": "drift",
+    "severity": 0.6
+  },
+  "models": [
+    {
+      "model_id": "CR-EW-002",
+      "model_name": "Early-Warning Default Decision Tree",
+      "language": "Python",
+      "methodology": "Decision tree (scikit-learn)",
+      "risk_tier": "Tier 2",
+      "owner": "Collections Strategy",
+      "executable": true,
+      "documented": true,
+      "documentation_age_years": 5.4,
+      "parity": "n/a",
+      "validation_rating": "AMBER",
+      "test_auc": 0.7055820105820105,
+      "high_findings": 0,
+      "medium_findings": 7,
+      "top_findings": [
+        "[Medium] Hosmer-Lemeshow p-value < 0.001 (below 0.05): predicted PDs do not match observed default rates.",
+        "[Medium] Mean predicted PD is 1.56x the observed default rate.",
+        "[Medium] Age band = 'under 25': approval-rate ratio 0.19 vs '25 and over' (screen 0.8).",
+        "[Medium] Age band = 'under 25': good customers approved 21% less often than in '25 and over'."
+      ],
+      "monitoring_status": "ALERT",
+      "status": "FAILING",
+      "reasons": [
+        "Monitoring ALERT (score PSI 0.53): re-validation required",
+        "Validation AMBER (7 medium-severity findings)",
+        "Original documentation 5.4 years old; new draft model card needs owner sign-off"
+      ],
+      "report_file": "CR-EW-002_validation_report.html"
+    },
+    {
+      "model_id": "CR-PD-001",
+      "model_name": "Retail Unsecured Loan Application Scorecard (PD)",
+      "language": "R",
+      "methodology": "Logistic regression (GLM, binomial/logit)",
+      "risk_tier": "Tier 1",
+      "owner": "Retail Credit Risk Analytics",
+      "executable": true,
+      "documented": true,
+      "documentation_age_years": 7.7,
+      "parity": "PASS",
+      "validation_rating": "AMBER",
+      "test_auc": 0.7573544973544973,
+      "high_findings": 0,
+      "medium_findings": 7,
+      "top_findings": [
+        "[Medium] Age band = 'under 25': approval-rate ratio 0.55 vs '25 and over' (screen 0.8).",
+        "[Medium] Age band = 'under 25': good customers approved 12% less often than in '25 and over'.",
+        "[Medium] Personal status & sex = 'female : non-single or male : single': approval-rate ratio 0.56 vs 'male : married/widowed' (screen 0.8).",
+        "[Medium] Personal status & sex = 'female : non-single or male : single': good customers approved 17% less often than in 'male : married/widowed'."
+      ],
+      "monitoring_status": "ALERT",
+      "status": "FAILING",
+      "reasons": [
+        "Monitoring ALERT (score PSI 0.19): re-validation required",
+        "Validation AMBER (7 medium-severity findings)",
+        "Original documentation 7.7 years old; new draft model card needs owner sign-off"
+      ],
+      "report_file": "CR-PD-001_validation_report.html"
+    },
+    {
+      "model_id": "CR-PR-003",
+      "model_name": "Risk-Based Pricing Gradient Boosting Model",
+      "language": "Python",
+      "methodology": "Gradient boosting (scikit-learn)",
+      "risk_tier": "Tier 1",
+      "owner": "Pricing & Product Analytics",
+      "executable": true,
+      "documented": true,
+      "documentation_age_years": 4.0,
+      "parity": "n/a",
+      "validation_rating": "AMBER",
+      "test_auc": 0.791005291005291,
+      "high_findings": 0,
+      "medium_findings": 6,
+      "top_findings": [
+        "[Medium] Train/test AUC gap of 0.174 suggests overfitting.",
+        "[Medium] Age band = 'under 25': approval-rate ratio 0.42 vs '25 and over' (screen 0.8).",
+        "[Medium] Age band = 'under 25': good customers approved 26% less often than in '25 and over'.",
+        "[Medium] Personal status & sex = 'female : non-single or male : single': approval-rate ratio 0.63 vs 'male : married/widowed' (screen 0.8)."
+      ],
+      "monitoring_status": "ALERT",
+      "status": "FAILING",
+      "reasons": [
+        "Monitoring ALERT (score PSI 0.31): re-validation required",
+        "Validation AMBER (6 medium-severity findings)",
+        "Original documentation 4.0 years old; new draft model card needs owner sign-off"
+      ],
+      "report_file": "CR-PR-003_validation_report.html"
+    },
+    {
+      "model_id": "CR-BH-004",
+      "model_name": "Behavioural Credit Score (Existing Customers)",
+      "language": "SAS",
+      "methodology": "Logistic regression (SAS PROC LOGISTIC)",
+      "risk_tier": "Tier 1",
+      "owner": "Retail Credit Risk Analytics",
+      "executable": false,
+      "documented": true,
+      "documentation_age_years": 9.5,
+      "parity": "n/a",
+      "validation_rating": "not run",
+      "test_auc": null,
+      "high_findings": 0,
+      "medium_findings": 0,
+      "top_findings": [],
+      "monitoring_status": "not monitored",
+      "status": "BLOCKED",
+      "reasons": [
+        "Cannot be executed in the factory: Not executable here (no SAS licence) - documentation only",
+        "Original documentation 9.5 years old; new draft model card needs owner sign-off"
+      ],
+      "report_file": null
+    }
+  ],
+  "status_rules": {
+    "FAILING": "Validation rating RED, R->Python parity FAILED, or a monitoring ALERT",
+    "BLOCKED": "The model cannot be executed in the factory, so no validation evidence exists",
+    "NEEDS ATTENTION": "Validation rating AMBER, a monitoring WARN, or stale documentation",
+    "PENDING": "The stages needed to judge the model have not run yet",
+    "OK": "Validated GREEN with no monitoring warnings"
+  }
+}

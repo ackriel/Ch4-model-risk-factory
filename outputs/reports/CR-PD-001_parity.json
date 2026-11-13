@@ -1,13 +1,13 @@
 {
   "model_id": "CR-PD-001",
   "model_name": "Retail Unsecured Loan Application Scorecard (PD)",
-  "generated_at": "2026-11-13T11:47:33Z",
+  "generated_at": "2026-11-13T14:46:06Z",
   "legacy_source": "legacy_models/scorecard_logit.R",
   "legacy_mode": "GENUINE_R_LIVE",
   "legacy_note": "R script executed now with Rscript.",
   "r_run_info": {
     "r_version": "R version 4.3.3 (2024-02-29)",
-    "run_utc": "2026-11-13T11:47:33Z",
+    "run_utc": "2026-11-13T14:46:06Z",
     "converged": "TRUE",
     "iterations": "6",
     "aic": "724.818127"

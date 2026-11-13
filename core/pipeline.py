@@ -46,11 +46,22 @@ def run_stage(stage: str, actor: str | None = None, **kwargs) -> dict:
     try:
         summary = _agent(stage).run(**kwargs)
         state.record_run(stage, actor, summary, time.perf_counter() - start, ok=True)
+        _refresh_portfolio()
         return summary
     except Exception as exc:
         summary = {"error": str(exc), "traceback": traceback.format_exc(limit=3)}
         state.record_run(stage, actor, summary, time.perf_counter() - start, ok=False)
+        _refresh_portfolio()
         raise
+
+
+def _refresh_portfolio() -> None:
+    """Keep outputs/reports/portfolio_report.html in step with the latest stage results."""
+    from core import portfolio
+    try:
+        portfolio.build()
+    except Exception as exc:  # the estate view must never break a pipeline run
+        state.audit("portfolio_refresh_failed", error=str(exc))
 
 
 def run_all(reviewer: str, auto_approve: bool = False) -> None:
