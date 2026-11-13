@@ -229,7 +229,7 @@ elif page == "Documentation":
     header("Model documentation", "Stage 2 - the Document agent writes a draft model card for every model")
     stage_control("document")
     if inv and state.load()["stages"]["document"]["status"] != "not_started":
-        mid = st.selectbox("Model", [m["model_id"] for m in inv["models"]],
+        mid = st.radio("Model", [m["model_id"] for m in inv["models"]], horizontal=True,
                            format_func=lambda x: f"{x} - {next(m['model_name'] for m in inv['models'] if m['model_id'] == x)}")
         card = document.load_card(mid)
         if card:
@@ -279,7 +279,7 @@ elif page == "Validation":
     stage_control("validate")
     if inv and state.load()["stages"]["validate"]["status"] != "not_started":
         ordered = sorted(inv["models"], key=lambda m: not m["executable"])
-        mid = st.selectbox("Model", [m["model_id"] for m in ordered],
+        mid = st.radio("Model", [m["model_id"] for m in ordered], horizontal=True,
                            format_func=lambda x: f"{x} - {next(m['model_name'] for m in inv['models'] if m['model_id'] == x)}")
         r = validate.load_validation(mid)
         if not r:
@@ -330,7 +330,7 @@ elif page == "Validation":
 elif page == "Monitoring":
     header("Monitoring", "Stage 5 - the Monitor agent scores a simulated production batch and checks for drift")
     c1, c2 = st.columns(2)
-    scenario = c1.selectbox("Scenario for the next run", ["drift", "stable"])
+    scenario = c1.radio("Scenario for the next run", ["drift", "stable"], horizontal=True)
     severity = c2.slider("Drift severity", 0.0, 1.0, 0.6, 0.1, disabled=scenario == "stable")
     stage_control("monitor", {"scenario": scenario, "severity": severity if scenario == "drift" else 0.0})
     mon = monitor.load_latest()
