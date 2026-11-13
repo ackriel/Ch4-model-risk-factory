@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-11-13T11:47:35Z",
+  "models": {
+    "CR-BH-004": {
+      "rag": "NOT VALIDATED",
+      "reason": "No executable model outputs (e.g. SAS documentation-only)."
+    },
+    "CR-EW-002": {
+      "rag": "AMBER",
+      "test_auc": 0.7056,
+      "score_psi": 0.0724,
+      "findings": 8
+    },
+    "CR-PR-003": {
+      "rag": "AMBER",
+      "test_auc": 0.791,
+      "score_psi": 0.0512,
+      "findings": 9
+    },
+    "CR-PD-001": {
+      "rag": "AMBER",
+      "test_auc": 0.7574,
+      "score_psi": 0.0516,
+      "findings": 9
+    }
+  }
+}

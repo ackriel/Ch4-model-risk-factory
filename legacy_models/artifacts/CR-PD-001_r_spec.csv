@@ -1,0 +1,18 @@
+"variable","type","level","level_order"
+"duration","numeric","",0
+"amount","numeric","",0
+"age","numeric","",0
+"status","factor","no checking account",0
+"status","factor","... < 0 DM",1
+"status","factor","0<= ... < 200 DM",2
+"status","factor","... >= 200 DM / salary for at least 1 year",3
+"credit_history","factor","no credits taken/all credits paid back duly",0
+"credit_history","factor","all credits at this bank paid back duly",1
+"credit_history","factor","existing credits paid back duly till now",2
+"credit_history","factor","delay in paying off in the past",3
+"credit_history","factor","critical account/other credits elsewhere",4
+"savings","factor","unknown/no savings account",0
+"savings","factor","... <  100 DM",1
+"savings","factor","100 <= ... <  500 DM",2
+"savings","factor","500 <= ... < 1000 DM",3
+"savings","factor","... >= 1000 DM",4

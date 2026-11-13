@@ -1,0 +1,149 @@
+{
+  "model_id": "CR-PD-001",
+  "model_name": "Retail Unsecured Loan Application Scorecard (PD)",
+  "generated_at": "2026-11-13T11:47:33Z",
+  "legacy_source": "legacy_models/scorecard_logit.R",
+  "legacy_mode": "GENUINE_R_LIVE",
+  "legacy_note": "R script executed now with Rscript.",
+  "r_run_info": {
+    "r_version": "R version 4.3.3 (2024-02-29)",
+    "run_utc": "2026-11-13T11:47:33Z",
+    "converged": "TRUE",
+    "iterations": "6",
+    "aic": "724.818127"
+  },
+  "generated_python_module": "redeveloped_models/cr_pd_001_logit.py",
+  "python_fit_iterations": 7,
+  "specification_check": {
+    "source": "specification exported by the R run",
+    "matches_discover_agent": true,
+    "variables": [
+      "duration",
+      "amount",
+      "age",
+      "status",
+      "credit_history",
+      "savings"
+    ]
+  },
+  "tolerance": 1e-06,
+  "coefficients": {
+    "n_terms": 15,
+    "unmatched_terms": [],
+    "max_abs_diff": 4.6629367034256575e-15,
+    "passed": true,
+    "table": [
+      {
+        "term": "(Intercept)",
+        "estimate_legacy": -0.396901087420047,
+        "estimate_new": -0.3969010874200452,
+        "abs_diff": 1.7763568394002505e-15
+      },
+      {
+        "term": "age",
+        "estimate_legacy": -0.0027143748831473,
+        "estimate_new": -0.002714374883147364,
+        "abs_diff": 6.418476861114186e-17
+      },
+      {
+        "term": "amount",
+        "estimate_legacy": 6.55151117923469e-05,
+        "estimate_new": 6.551511179234677e-05,
+        "abs_diff": 1.3552527156068805e-19
+      },
+      {
+        "term": "credit_historyall credits at this bank paid back duly",
+        "estimate_legacy": -1.00168242040531,
+        "estimate_new": -1.00168242040531,
+        "abs_diff": 0.0
+      },
+      {
+        "term": "credit_historycritical account/other credits elsewhere",
+        "estimate_legacy": 0.822068753461691,
+        "estimate_new": 0.8220687534616916,
+        "abs_diff": 6.661338147750939e-16
+      },
+      {
+        "term": "credit_historydelay in paying off in the past",
+        "estimate_legacy": 0.759881774909723,
+        "estimate_new": 0.7598817749097216,
+        "abs_diff": 1.3322676295501878e-15
+      },
+      {
+        "term": "credit_historyexisting credits paid back duly till now",
+        "estimate_legacy": -0.275613819327852,
+        "estimate_new": -0.275613819327852,
+        "abs_diff": 0.0
+      },
+      {
+        "term": "duration",
+        "estimate_legacy": 0.0239669661455497,
+        "estimate_new": 0.023966966145549686,
+        "abs_diff": 1.3877787807814457e-17
+      },
+      {
+        "term": "savings... <  100 DM",
+        "estimate_legacy": -0.101207216093751,
+        "estimate_new": -0.1012072160937509,
+        "abs_diff": 9.71445146547012e-17
+      },
+      {
+        "term": "savings... >= 1000 DM",
+        "estimate_legacy": -0.969547740808973,
+        "estimate_new": -0.969547740808972,
+        "abs_diff": 9.992007221626409e-16
+      },
+      {
+        "term": "savings100 <= ... <  500 DM",
+        "estimate_legacy": -0.680053610629509,
+        "estimate_new": -0.6800536106295098,
+        "abs_diff": 7.771561172376096e-16
+      },
+      {
+        "term": "savings500 <= ... < 1000 DM",
+        "estimate_legacy": -1.00775096916066,
+        "estimate_new": -1.0077509691606608,
+        "abs_diff": 6.661338147750939e-16
+      },
+      {
+        "term": "status... < 0 DM",
+        "estimate_legacy": -0.395783266990902,
+        "estimate_new": -0.3957832669909025,
+        "abs_diff": 4.996003610813204e-16
+      },
+      {
+        "term": "status... >= 200 DM / salary for at least 1 year",
+        "estimate_legacy": -1.58468540502864,
+        "estimate_new": -1.5846854050286354,
+        "abs_diff": 4.6629367034256575e-15
+      },
+      {
+        "term": "status0<= ... < 200 DM",
+        "estimate_legacy": -1.2274602154507,
+        "estimate_new": -1.2274602154507008,
+        "abs_diff": 8.881784197001252e-16
+      }
+    ]
+  },
+  "test_predictions": {
+    "n_compared": 300,
+    "n_unmatched_records": 0,
+    "max_abs_diff": 1.2212453270876722e-15,
+    "mean_abs_diff": 2.629031251958717e-16,
+    "n_over_tolerance": 0,
+    "tolerance": 1e-06,
+    "passed": true
+  },
+  "train_predictions": {
+    "n_compared": 700,
+    "n_unmatched_records": 0,
+    "max_abs_diff": 1.2212453270876722e-15,
+    "mean_abs_diff": 2.5085092733182334e-16,
+    "n_over_tolerance": 0,
+    "tolerance": 1e-06,
+    "passed": true
+  },
+  "parity_passed": true,
+  "genuine_migration": true,
+  "verdict": "PASS"
+}

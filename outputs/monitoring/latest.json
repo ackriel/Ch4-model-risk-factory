@@ -1,0 +1,461 @@
+{
+  "generated_at": "2026-11-13T11:47:35Z",
+  "scenario": "drift",
+  "severity": 0.6,
+  "batch_size": 400,
+  "note": "SIMULATED production batch. Outcomes are known only because this is a simulation; in production, default outcomes arrive 12+ months later, so AUC monitoring lags.",
+  "models": {
+    "CR-BH-004": {
+      "monitored": false,
+      "reason": "Model not executable in the factory."
+    },
+    "CR-EW-002": {
+      "monitored": true,
+      "score_psi": 0.5329020975975233,
+      "score_psi_status": "ALERT",
+      "feature_psi": [
+        {
+          "feature": "age",
+          "type": "numeric",
+          "psi": 0.4438332610386889,
+          "status": "ALERT"
+        },
+        {
+          "feature": "duration",
+          "type": "numeric",
+          "psi": 0.4391519913052291,
+          "status": "ALERT"
+        },
+        {
+          "feature": "amount",
+          "type": "numeric",
+          "psi": 0.32848253722003967,
+          "status": "ALERT"
+        },
+        {
+          "feature": "employment_duration",
+          "type": "categorical",
+          "psi": 0.26394887873028866,
+          "status": "ALERT"
+        },
+        {
+          "feature": "status",
+          "type": "categorical",
+          "psi": 0.2307869296614114,
+          "status": "WARN"
+        },
+        {
+          "feature": "credit_history",
+          "type": "categorical",
+          "psi": 0.05700479637706155,
+          "status": "OK"
+        },
+        {
+          "feature": "housing",
+          "type": "categorical",
+          "psi": 0.046799205316938416,
+          "status": "OK"
+        },
+        {
+          "feature": "property",
+          "type": "categorical",
+          "psi": 0.04372971670837478,
+          "status": "OK"
+        },
+        {
+          "feature": "savings",
+          "type": "categorical",
+          "psi": 0.03547900439323294,
+          "status": "OK"
+        }
+      ],
+      "auc_validation": 0.7055820105820105,
+      "auc_new_batch": 0.6696171046016247,
+      "approval_rate_validation": 0.17,
+      "approval_rate_new_batch": 0.0375,
+      "mean_pd_new_batch": 0.5558161735227827,
+      "observed_default_rate_new_batch": 0.3825,
+      "alerts": [
+        {
+          "level": "ALERT",
+          "message": "Score distribution shift: PSI 0.533"
+        },
+        {
+          "level": "ALERT",
+          "message": "Input 'age' drift: PSI 0.444"
+        },
+        {
+          "level": "ALERT",
+          "message": "Input 'duration' drift: PSI 0.439"
+        },
+        {
+          "level": "ALERT",
+          "message": "Input 'amount' drift: PSI 0.328"
+        },
+        {
+          "level": "ALERT",
+          "message": "Input 'employment_duration' drift: PSI 0.264"
+        },
+        {
+          "level": "WARN",
+          "message": "Input 'status' drift: PSI 0.231"
+        },
+        {
+          "level": "WARN",
+          "message": "Approval rate moved 17% -> 4%"
+        }
+      ],
+      "status": "ALERT",
+      "action": "Trigger re-validation and notify model owner"
+    },
+    "CR-PR-003": {
+      "monitored": true,
+      "score_psi": 0.3107687297680848,
+      "score_psi_status": "ALERT",
+      "feature_psi": [
+        {
+          "feature": "age",
+          "type": "numeric",
+          "psi": 0.4438332610386889,
+          "status": "ALERT"
+        },
+        {
+          "feature": "duration",
+          "type": "numeric",
+          "psi": 0.4391519913052291,
+          "status": "ALERT"
+        },
+        {
+          "feature": "amount",
+          "type": "numeric",
+          "psi": 0.32848253722003967,
+          "status": "ALERT"
+        },
+        {
+          "feature": "employment_duration",
+          "type": "categorical",
+          "psi": 0.26394887873028866,
+          "status": "ALERT"
+        },
+        {
+          "feature": "status",
+          "type": "categorical",
+          "psi": 0.2307869296614114,
+          "status": "WARN"
+        },
+        {
+          "feature": "purpose",
+          "type": "categorical",
+          "psi": 0.08971626077087409,
+          "status": "OK"
+        },
+        {
+          "feature": "people_liable",
+          "type": "categorical",
+          "psi": 0.06959125822618281,
+          "status": "OK"
+        },
+        {
+          "feature": "credit_history",
+          "type": "categorical",
+          "psi": 0.05700479637706155,
+          "status": "OK"
+        },
+        {
+          "feature": "housing",
+          "type": "categorical",
+          "psi": 0.046799205316938416,
+          "status": "OK"
+        },
+        {
+          "feature": "job",
+          "type": "categorical",
+          "psi": 0.04661208276478707,
+          "status": "OK"
+        },
+        {
+          "feature": "property",
+          "type": "categorical",
+          "psi": 0.04372971670837478,
+          "status": "OK"
+        },
+        {
+          "feature": "present_residence",
+          "type": "categorical",
+          "psi": 0.042423491277284425,
+          "status": "OK"
+        },
+        {
+          "feature": "personal_status_sex",
+          "type": "categorical",
+          "psi": 0.03717704515310408,
+          "status": "OK"
+        },
+        {
+          "feature": "savings",
+          "type": "categorical",
+          "psi": 0.03547900439323294,
+          "status": "OK"
+        },
+        {
+          "feature": "installment_rate",
+          "type": "categorical",
+          "psi": 0.0349924783401956,
+          "status": "OK"
+        },
+        {
+          "feature": "other_debtors",
+          "type": "categorical",
+          "psi": 0.0335630225338465,
+          "status": "OK"
+        },
+        {
+          "feature": "other_installment_plans",
+          "type": "categorical",
+          "psi": 0.02759710575686108,
+          "status": "OK"
+        },
+        {
+          "feature": "foreign_worker",
+          "type": "categorical",
+          "psi": 0.01912152673048505,
+          "status": "OK"
+        },
+        {
+          "feature": "telephone",
+          "type": "categorical",
+          "psi": 0.011668969065279793,
+          "status": "OK"
+        },
+        {
+          "feature": "number_credits",
+          "type": "categorical",
+          "psi": 0.0014604685736666454,
+          "status": "OK"
+        }
+      ],
+      "auc_validation": 0.791005291005291,
+      "auc_new_batch": 0.8127331904421686,
+      "approval_rate_validation": 0.37,
+      "approval_rate_new_batch": 0.235,
+      "mean_pd_new_batch": 0.38281737566534046,
+      "observed_default_rate_new_batch": 0.3825,
+      "alerts": [
+        {
+          "level": "ALERT",
+          "message": "Score distribution shift: PSI 0.311"
+        },
+        {
+          "level": "ALERT",
+          "message": "Input 'age' drift: PSI 0.444"
+        },
+        {
+          "level": "ALERT",
+          "message": "Input 'duration' drift: PSI 0.439"
+        },
+        {
+          "level": "ALERT",
+          "message": "Input 'amount' drift: PSI 0.328"
+        },
+        {
+          "level": "ALERT",
+          "message": "Input 'employment_duration' drift: PSI 0.264"
+        },
+        {
+          "level": "WARN",
+          "message": "Input 'status' drift: PSI 0.231"
+        },
+        {
+          "level": "WARN",
+          "message": "Approval rate moved 37% -> 24%"
+        }
+      ],
+      "status": "ALERT",
+      "action": "Trigger re-validation and notify model owner"
+    },
+    "CR-PD-001": {
+      "monitored": true,
+      "score_psi": 0.19191138367342023,
+      "score_psi_status": "WARN",
+      "feature_psi": [
+        {
+          "feature": "age",
+          "type": "numeric",
+          "psi": 0.4438332610386889,
+          "status": "ALERT"
+        },
+        {
+          "feature": "duration",
+          "type": "numeric",
+          "psi": 0.4391519913052291,
+          "status": "ALERT"
+        },
+        {
+          "feature": "amount",
+          "type": "numeric",
+          "psi": 0.32848253722003967,
+          "status": "ALERT"
+        },
+        {
+          "feature": "status",
+          "type": "categorical",
+          "psi": 0.2307869296614114,
+          "status": "WARN"
+        },
+        {
+          "feature": "credit_history",
+          "type": "categorical",
+          "psi": 0.05700479637706155,
+          "status": "OK"
+        },
+        {
+          "feature": "savings",
+          "type": "categorical",
+          "psi": 0.03547900439323294,
+          "status": "OK"
+        }
+      ],
+      "auc_validation": 0.7573544973544973,
+      "auc_new_batch": 0.7945542589505438,
+      "approval_rate_validation": 0.32,
+      "approval_rate_new_batch": 0.21,
+      "mean_pd_new_batch": 0.3644872443382026,
+      "observed_default_rate_new_batch": 0.3825,
+      "alerts": [
+        {
+          "level": "WARN",
+          "message": "Score distribution shift: PSI 0.192"
+        },
+        {
+          "level": "ALERT",
+          "message": "Input 'age' drift: PSI 0.444"
+        },
+        {
+          "level": "ALERT",
+          "message": "Input 'duration' drift: PSI 0.439"
+        },
+        {
+          "level": "ALERT",
+          "message": "Input 'amount' drift: PSI 0.328"
+        },
+        {
+          "level": "WARN",
+          "message": "Input 'status' drift: PSI 0.231"
+        },
+        {
+          "level": "WARN",
+          "message": "Approval rate moved 32% -> 21%"
+        }
+      ],
+      "status": "ALERT",
+      "action": "Trigger re-validation and notify model owner"
+    }
+  },
+  "alerts": [
+    {
+      "model_id": "CR-EW-002",
+      "level": "ALERT",
+      "message": "Score distribution shift: PSI 0.533"
+    },
+    {
+      "model_id": "CR-EW-002",
+      "level": "ALERT",
+      "message": "Input 'age' drift: PSI 0.444"
+    },
+    {
+      "model_id": "CR-EW-002",
+      "level": "ALERT",
+      "message": "Input 'duration' drift: PSI 0.439"
+    },
+    {
+      "model_id": "CR-EW-002",
+      "level": "ALERT",
+      "message": "Input 'amount' drift: PSI 0.328"
+    },
+    {
+      "model_id": "CR-EW-002",
+      "level": "ALERT",
+      "message": "Input 'employment_duration' drift: PSI 0.264"
+    },
+    {
+      "model_id": "CR-EW-002",
+      "level": "WARN",
+      "message": "Input 'status' drift: PSI 0.231"
+    },
+    {
+      "model_id": "CR-EW-002",
+      "level": "WARN",
+      "message": "Approval rate moved 17% -> 4%"
+    },
+    {
+      "model_id": "CR-PR-003",
+      "level": "ALERT",
+      "message": "Score distribution shift: PSI 0.311"
+    },
+    {
+      "model_id": "CR-PR-003",
+      "level": "ALERT",
+      "message": "Input 'age' drift: PSI 0.444"
+    },
+    {
+      "model_id": "CR-PR-003",
+      "level": "ALERT",
+      "message": "Input 'duration' drift: PSI 0.439"
+    },
+    {
+      "model_id": "CR-PR-003",
+      "level": "ALERT",
+      "message": "Input 'amount' drift: PSI 0.328"
+    },
+    {
+      "model_id": "CR-PR-003",
+      "level": "ALERT",
+      "message": "Input 'employment_duration' drift: PSI 0.264"
+    },
+    {
+      "model_id": "CR-PR-003",
+      "level": "WARN",
+      "message": "Input 'status' drift: PSI 0.231"
+    },
+    {
+      "model_id": "CR-PR-003",
+      "level": "WARN",
+      "message": "Approval rate moved 37% -> 24%"
+    },
+    {
+      "model_id": "CR-PD-001",
+      "level": "WARN",
+      "message": "Score distribution shift: PSI 0.192"
+    },
+    {
+      "model_id": "CR-PD-001",
+      "level": "ALERT",
+      "message": "Input 'age' drift: PSI 0.444"
+    },
+    {
+      "model_id": "CR-PD-001",
+      "level": "ALERT",
+      "message": "Input 'duration' drift: PSI 0.439"
+    },
+    {
+      "model_id": "CR-PD-001",
+      "level": "ALERT",
+      "message": "Input 'amount' drift: PSI 0.328"
+    },
+    {
+      "model_id": "CR-PD-001",
+      "level": "WARN",
+      "message": "Input 'status' drift: PSI 0.231"
+    },
+    {
+      "model_id": "CR-PD-001",
+      "level": "WARN",
+      "message": "Approval rate moved 32% -> 21%"
+    }
+  ],
+  "models_needing_revalidation": [
+    "CR-EW-002",
+    "CR-PR-003",
+    "CR-PD-001"
+  ]
+}

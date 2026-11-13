@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Validation report - {{ r.model_name }} ({{ r.model_id }})</title>
+<style>
+  body { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: #1c2733; margin: 0; background: #f4f6f9; }
+  header { background: #0b2545; color: #fff; padding: 24px 40px; }
+  header h1 { margin: 0 0 4px; font-size: 22px; }
+  header p { margin: 0; opacity: .8; font-size: 13px; }
+  main { max-width: 1100px; margin: 0 auto; padding: 24px 40px 60px; }
+  section { background: #fff; border-radius: 8px; padding: 20px 24px; margin-bottom: 18px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  h2 { font-size: 17px; margin: 0 0 12px; color: #0b2545; border-bottom: 2px solid #e6ebf1; padding-bottom: 6px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #e6ebf1; }
+  th { background: #f4f6f9; }
+  .kpis { display: flex; gap: 12px; flex-wrap: wrap; }
+  .kpi { flex: 1; min-width: 120px; background: #f4f6f9; border-radius: 6px; padding: 10px 14px; }
+  .kpi b { display: block; font-size: 22px; color: #0b2545; }
+  .kpi span { font-size: 12px; color: #5b6b7c; }
+  .rag { display: inline-block; padding: 4px 12px; border-radius: 12px; color: #fff; font-weight: 600; }
+  .RED { background: #c62828; } .AMBER { background: #ef8f00; } .GREEN { background: #2e7d32; }
+  .sev-High { color: #c62828; font-weight: 600; } .sev-Medium { color: #ef8f00; font-weight: 600; }
+  .sev-Low { color: #5b6b7c; } .sev-Info { color: #2e7d32; }
+  .charts { display: flex; flex-wrap: wrap; gap: 12px; } .charts img { max-width: 100%; }
+  .label { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; padding: 2px 8px; border-radius: 4px; }
+  .computed { background: #e3f2e6; color: #1b5e20; } .ai { background: #fde7c8; color: #8a4b00; }
+  .note { font-size: 12px; color: #5b6b7c; }
+  .ok { color: #2e7d32; } .warn { color: #ef8f00; } .alert { color: #c62828; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Independent validation report (automated draft) - {{ r.model_name }}</h1>
+  <p>{{ r.model_id }} · {{ m.methodology }} · {{ m.language }} · generated {{ r.generated_at }} by the Model Risk Factory Validate agent</p>
+</header>
+<main>
+
+<section>
+  <h2>Summary</h2>
+  <p>Overall rating: <span class="rag {{ r.rag_rating }}">{{ r.rag_rating }}</span>
+     &nbsp; <span class="label computed">computed / rule-based</span></p>
+  <div class="kpis">
+    <div class="kpi"><b>{{ "%.3f"|format(r.performance.test.auc) }}</b><span>AUC (test)</span></div>
+    <div class="kpi"><b>{{ "%.3f"|format(r.performance.test.gini) }}</b><span>Gini (test)</span></div>
+    <div class="kpi"><b>{{ "%.3f"|format(r.performance.test.ks) }}</b><span>KS (test)</span></div>
+    <div class="kpi"><b>{{ "%.3f"|format(r.stability.score_psi) }}</b><span>Score PSI ({{ r.stability.score_psi_status }})</span></div>
+    <div class="kpi"><b>{{ r.findings|length }}</b><span>Findings</span></div>
+  </div>
+  <h3 style="font-size:14px;margin-top:18px">Commentary <span class="label {{ 'ai' if r.commentary.source.startswith('ai') else 'computed' }}">{{ r.commentary.source }}</span></h3>
+  <p>{{ r.commentary.text }}</p>
+</section>
+
+<section>
+  <h2>Findings <span class="label computed">rule-based</span></h2>
+  <table><tr><th>Severity</th><th>Area</th><th>Finding</th></tr>
+  {% for f in r.findings %}<tr><td class="sev-{{ f.severity }}">{{ f.severity }}</td><td>{{ f.area }}</td><td>{{ f.finding }}</td></tr>{% endfor %}
+  </table>
+</section>
+
+<section>
+  <h2>1. Performance <span class="label computed">computed</span></h2>
+  <table>
+    <tr><th>Metric</th><th>Development (train)</th><th>Hold-out (test)</th></tr>
+    {% for k, lab in [("n","Records"),("default_rate","Observed default rate"),("mean_predicted_pd","Mean predicted PD"),("auc","AUC"),("gini","Gini"),("ks","KS"),("brier","Brier score")] %}
+    <tr><td>{{ lab }}</td>
+      <td>{{ r.performance.train[k] if k == "n" else "%.4f"|format(r.performance.train[k]) }}</td>
+      <td>{{ r.performance.test[k] if k == "n" else "%.4f"|format(r.performance.test[k]) }}</td></tr>
+    {% endfor %}
+    <tr><td>Hosmer-Lemeshow p-value</td><td>{{ "%.4f"|format(r.performance.train.hosmer_lemeshow.p_value) }}</td><td>{{ "%.4f"|format(r.performance.test.hosmer_lemeshow.p_value) }}</td></tr>
+  </table>
+  <div class="charts">
+    <img src="data:image/png;base64,{{ charts.roc }}" alt="ROC">
+    <img src="data:image/png;base64,{{ charts.calibration }}" alt="Calibration">
+    <img src="data:image/png;base64,{{ charts.distribution }}" alt="Score distribution">
+  </div>
+  {% set c = r.performance.test.cost %}
+  <h3 style="font-size:14px">Business cost at the cost-optimal cut-off (approve if PD &lt; {{ "%.3f"|format(c.threshold) }})</h3>
+  <table>
+    <tr><th>Approval rate</th><th>Bad customers approved</th><th>Good customers rejected</th><th>Total cost (units)</th><th>Cost if approving everyone</th><th>Saving vs no model</th></tr>
+    <tr><td>{{ "%.1f%%"|format(100*c.approval_rate) }}</td><td>{{ c.fn }}</td><td>{{ c.fp }}</td><td>{{ "%.0f"|format(c.total_cost) }}</td><td>{{ "%.0f"|format(c.baseline_cost_approve_all) }}</td><td>{{ "%.0f"|format(c.cost_saving_vs_no_model) }}</td></tr>
+  </table>
+  <p class="note">Cost matrix from the dataset documentation: approving a bad customer = 5 units, rejecting a good customer = 1 unit.</p>
+</section>
+
+<section>
+  <h2>2. Stability <span class="label computed">computed</span></h2>
+  <p>Reference: {{ r.stability.reference }} · Comparison: {{ r.stability.comparison }} ·
+     Score PSI = <b>{{ "%.4f"|format(r.stability.score_psi) }}</b> ({{ r.stability.score_psi_status }}).
+     Thresholds: &lt; {{ cfg.PSI_WARN }} OK, {{ cfg.PSI_WARN }}-{{ cfg.PSI_ALERT }} WARN, &ge; {{ cfg.PSI_ALERT }} ALERT.</p>
+  <table><tr><th>Input</th><th>Type</th><th>PSI</th><th>Status</th></tr>
+  {% for f in r.stability.feature_psi %}<tr><td>{{ f.feature }}</td><td>{{ f.type }}</td><td>{{ "%.4f"|format(f.psi) }}</td><td class="{{ f.status|lower }}">{{ f.status }}</td></tr>{% endfor %}
+  </table>
+</section>
+
+<section>
+  <h2>3. Fairness <span class="label computed">computed</span></h2>
+  <p class="note">Decision rule: approve when PD &lt; {{ "%.3f"|format(r.decision_threshold) }}. Disparate-impact ratio = group approval rate / most-approved group's rate
+  (screen &ge; {{ cfg.DISPARATE_IMPACT_MIN }}). Equal-opportunity gap = difference in approval rate among genuinely good customers (screen &le; {{ cfg.EQUAL_OPPORTUNITY_MAX_GAP }}).
+  These are screening heuristics, not legal determinations. Groups under 30 records are marked small.</p>
+  <img src="data:image/png;base64,{{ charts.fairness }}" alt="Fairness" style="max-width:100%">
+  {% for dim, res in r.fairness.items() %}
+  <h3 style="font-size:14px">{{ dims[dim] }}</h3>
+  {% if dim in r.fairness_notes %}<p class="note">{{ r.fairness_notes[dim] }}</p>{% endif %}
+  <table><tr><th>Group</th><th>n</th><th>Approval rate</th><th>Good customers approved</th><th>Observed DR</th><th>Mean PD</th><th>DI ratio</th><th>EO gap</th><th>Flag</th></tr>
+  {% for g in res.groups %}<tr>
+    <td>{{ g.group }}{% if g.small_sample %} <span class="note">(small)</span>{% endif %}</td><td>{{ g.n }}</td>
+    <td>{{ "%.1f%%"|format(100*g.approval_rate) }}</td>
+    <td>{{ "%.1f%%"|format(100*g.true_approval_rate) if g.true_approval_rate is not none else "-" }}</td>
+    <td>{{ "%.1f%%"|format(100*g.observed_default_rate) }}</td><td>{{ "%.3f"|format(g.mean_pd) }}</td>
+    <td>{{ "%.2f"|format(g.disparate_impact_ratio) }}</td>
+    <td>{{ "%.2f"|format(g.equal_opportunity_gap) if g.equal_opportunity_gap is not none else "-" }}</td>
+    <td class="{{ 'alert' if g.flag_disparate_impact or g.flag_equal_opportunity else 'ok' }}">{{ "FLAG" if g.flag_disparate_impact or g.flag_equal_opportunity else "-" }}</td>
+  </tr>{% endfor %}
+  </table>
+  {% endfor %}
+</section>
+
+{% if parity %}
+<section>
+  <h2>4. Redevelopment parity <span class="label computed">computed</span></h2>
+  <p>Legacy: <code>{{ parity.legacy_source }}</code> ({{ parity.legacy_mode }}) → Python: <code>{{ parity.generated_python_module }}</code>.
+     {{ parity.legacy_note }} {% if parity.r_run_info %}R run: {{ parity.r_run_info.r_version }}, {{ parity.r_run_info.run_utc }}.{% endif %}</p>
+  <table><tr><th>Check</th><th>Compared</th><th>Max |difference|</th><th>Tolerance</th><th>Result</th></tr>
+    <tr><td>Coefficients</td><td>{{ parity.coefficients.n_terms }} terms</td><td>{{ "%.2e"|format(parity.coefficients.max_abs_diff) }}</td><td>{{ parity.tolerance }}</td><td>{{ "PASS" if parity.coefficients.passed else "FAIL" }}</td></tr>
+    <tr><td>Test predictions</td><td>{{ parity.test_predictions.n_compared }} records</td><td>{{ "%.2e"|format(parity.test_predictions.max_abs_diff) }}</td><td>{{ parity.tolerance }}</td><td>{{ "PASS" if parity.test_predictions.passed else "FAIL" }}</td></tr>
+    <tr><td>Train predictions</td><td>{{ parity.train_predictions.n_compared }} records</td><td>{{ "%.2e"|format(parity.train_predictions.max_abs_diff) }}</td><td>{{ parity.tolerance }}</td><td>{{ "PASS" if parity.train_predictions.passed else "FAIL" }}</td></tr>
+  </table>
+  <p><b>Verdict: {{ parity.verdict }}</b></p>
+</section>
+{% endif %}
+
+<section>
+  <h2>Model documentation reference</h2>
+  {% if card %}<p>Model card: <code>outputs/model_cards/{{ r.model_id }}.md</code> (narrative source: {{ card.narrative.source }}). Inputs: {{ card.facts.input_variables|map(attribute='name')|join(', ') }}.</p>{% endif %}
+  <p class="note">Scores used: train = <code>{{ r.scores_source.train }}</code>, test = <code>{{ r.scores_source.test }}</code>.</p>
+</section>
+
+<section>
+  <h2>Limitations and disclaimer</h2>
+  <ul class="note">
+    <li>All numbers in this report were calculated by deterministic Python code (validation/*.py). Text labelled "ai_generated" was written by a language model from those numbers and must be reviewed.</li>
+    <li>Data: 1,000 loans from a South German bank (1973-1975), corrected version (Grömping, 2019), used as a public stand-in. Results do not describe any real UK bank's portfolio.</li>
+    <li>Stability is measured between development and hold-out samples drawn from the same period; real time-based drift is simulated separately by the Monitor agent.</li>
+    <li>This automated draft supports, but does not replace, independent human validation. Producing it does not by itself demonstrate compliance with PRA SS1/23.</li>
+  </ul>
+</section>
+</main>
+</body>
+</html>

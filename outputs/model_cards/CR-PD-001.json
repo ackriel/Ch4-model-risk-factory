@@ -1,0 +1,73 @@
+{
+  "model_id": "CR-PD-001",
+  "model_name": "Retail Unsecured Loan Application Scorecard (PD)",
+  "status": "DRAFT - requires human review",
+  "generated_at": "2026-11-13T11:47:33Z",
+  "facts": {
+    "source": "extracted",
+    "owner": "Retail Credit Risk Analytics",
+    "language": "R",
+    "methodology_detected": "Logistic regression (GLM, binomial/logit)",
+    "target_variable": "default_flag",
+    "target_definition": "1 = bad risk (credit contract not complied with), 0 = good risk",
+    "input_variables": [
+      {
+        "name": "duration",
+        "type": "numeric",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "amount",
+        "type": "numeric",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "age",
+        "type": "numeric",
+        "protected_or_proxy": true
+      },
+      {
+        "name": "status",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "credit_history",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "savings",
+        "type": "categorical",
+        "protected_or_proxy": false
+      }
+    ],
+    "hyperparameters": {
+      "family": "binomial(link = \"logit\")"
+    },
+    "data_source": "data/train.csv, data/test.csv",
+    "source_file": "legacy_models/scorecard_logit.R",
+    "source_sha256": "5c263a7292d609f79abf326ddeadf8acb8d59099a487f90da52f0fb6ebea97eb",
+    "risk_tier": "Tier 1 - material (customer decisions / financial reporting)",
+    "executable_in_factory": true
+  },
+  "narrative": {
+    "source": "rule_based",
+    "purpose": "Estimate probability of default (PD) for new personal-loan applications. Business use: Credit approval decisions and risk-based pricing.",
+    "methodology": "Binary logistic regression estimating the probability of default (PD) as a logit-linear function of the inputs. Categorical inputs enter as dummy variables against a reference level.",
+    "assumptions": [
+      "Log-odds of default are linear in each numeric input (no transformation or binning detected).",
+      "Observations are independent; no account-level or time clustering is modelled.",
+      "Effects are additive: no interaction terms are specified.",
+      "The development sample is representative of the population scored today."
+    ],
+    "limitations": [
+      "Cannot capture non-linear effects or interactions unless explicitly engineered.",
+      "Developed on 1,000 historical German loans from 1973-1975: a small, old, non-UK sample used here as a stand-in for bank data."
+    ],
+    "risks": [
+      "Uses age (protected characteristic under the Equality Act 2010) as a direct input. Requires a documented justification and fairness testing before use in customer decisions.",
+      "Documentation last reviewed 2019-03 (7.7 years ago): out of date."
+    ]
+  }
+}

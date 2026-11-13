@@ -1,0 +1,68 @@
+{
+  "model_id": "CR-BH-004",
+  "model_name": "Behavioural Credit Score (Existing Customers)",
+  "status": "DRAFT - requires human review",
+  "generated_at": "2026-11-13T11:47:33Z",
+  "facts": {
+    "source": "extracted",
+    "owner": "Retail Credit Risk Analytics",
+    "language": "SAS",
+    "methodology_detected": "Logistic regression (SAS PROC LOGISTIC)",
+    "target_variable": "default_flag",
+    "target_definition": "1 = bad risk (credit contract not complied with), 0 = good risk",
+    "input_variables": [
+      {
+        "name": "util_band",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "max_arrears_6m",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "months_on_book",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "age",
+        "type": "numeric",
+        "protected_or_proxy": true
+      }
+    ],
+    "hyperparameters": {
+      "variable_selection": "stepwise",
+      "slentry": "0.05",
+      "slstay": "0.05"
+    },
+    "data_source": "crd.monthly_accounts, work.beh_base (production SAS library, not available)",
+    "source_file": "legacy_models/behavioural_score.sas",
+    "source_sha256": "8568b5d3a66b7c72f6c73c5fc53f2de7c3823977398aacc64156bd50695ad51a",
+    "risk_tier": "Tier 1 - material (customer decisions / financial reporting)",
+    "executable_in_factory": false
+  },
+  "narrative": {
+    "source": "rule_based",
+    "purpose": "Monthly re-scoring of existing borrowers' probability of default. Business use: Limit management and provisioning inputs.",
+    "methodology": "Binary logistic regression estimating the probability of default (PD) as a logit-linear function of the inputs. Categorical inputs enter as dummy variables against a reference level.",
+    "assumptions": [
+      "Log-odds of default are linear in each numeric input (no transformation or binning detected).",
+      "Observations are independent; no account-level or time clustering is modelled.",
+      "Effects are additive: no interaction terms are specified.",
+      "The development sample is representative of the population scored today."
+    ],
+    "limitations": [
+      "Cannot capture non-linear effects or interactions unless explicitly engineered.",
+      "Developed on 1,000 historical German loans from 1973-1975: a small, old, non-UK sample used here as a stand-in for bank data."
+    ],
+    "risks": [
+      "Uses age (protected characteristic under the Equality Act 2010) as a direct input. Requires a documented justification and fairness testing before use in customer decisions.",
+      "Documentation last reviewed 2017-05 (9.5 years ago): out of date.",
+      "Stepwise variable selection is unstable and inflates apparent significance.",
+      "Depends on a SAS licence and a production library not available for independent re-execution: the model cannot be validated as-is.",
+      "Model could not be executed in the factory, so no performance evidence exists."
+    ]
+  }
+}

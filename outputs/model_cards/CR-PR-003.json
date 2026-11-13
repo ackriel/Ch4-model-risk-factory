@@ -1,0 +1,147 @@
+{
+  "model_id": "CR-PR-003",
+  "model_name": "Risk-Based Pricing Gradient Boosting Model",
+  "status": "DRAFT - requires human review",
+  "generated_at": "2026-11-13T11:47:33Z",
+  "facts": {
+    "source": "extracted",
+    "owner": "Pricing & Product Analytics",
+    "language": "Python",
+    "methodology_detected": "Gradient boosting (scikit-learn)",
+    "target_variable": "default_flag",
+    "target_definition": "1 = bad risk (credit contract not complied with), 0 = good risk",
+    "input_variables": [
+      {
+        "name": "duration",
+        "type": "numeric",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "amount",
+        "type": "numeric",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "age",
+        "type": "numeric",
+        "protected_or_proxy": true
+      },
+      {
+        "name": "status",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "credit_history",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "purpose",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "savings",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "employment_duration",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "installment_rate",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "personal_status_sex",
+        "type": "categorical",
+        "protected_or_proxy": true
+      },
+      {
+        "name": "other_debtors",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "present_residence",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "property",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "other_installment_plans",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "housing",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "number_credits",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "job",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "people_liable",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "telephone",
+        "type": "categorical",
+        "protected_or_proxy": false
+      },
+      {
+        "name": "foreign_worker",
+        "type": "categorical",
+        "protected_or_proxy": true
+      }
+    ],
+    "hyperparameters": {
+      "n_estimators": "150",
+      "learning_rate": "0.05",
+      "max_depth": "3",
+      "subsample": "0.8",
+      "random_state": "42"
+    },
+    "data_source": "data/train.csv and data/test.csv via core.data.load_split()",
+    "source_file": "legacy_models/pricing_gbm.py",
+    "source_sha256": "86175b44b73b6e0fa19f6214966ecc48892be3774468b7fa14a874808134976b",
+    "risk_tier": "Tier 1 - material (customer decisions / financial reporting)",
+    "executable_in_factory": true
+  },
+  "narrative": {
+    "source": "rule_based",
+    "purpose": "Estimate default risk to set the interest-rate band offered to applicants. Business use: Risk-based pricing of personal loans.",
+    "methodology": "Gradient-boosted ensemble of shallow decision trees; each tree corrects the errors of the previous ones. Output is a PD estimate.",
+    "assumptions": [
+      "Development sample is representative.",
+      "Hyperparameters chosen on the development data generalise."
+    ],
+    "limitations": [
+      "Low intrinsic interpretability: individual decisions need explanation tools (e.g. SHAP).",
+      "Higher risk of overfitting on a small sample (700 training rows).",
+      "Developed on 1,000 historical German loans from 1973-1975: a small, old, non-UK sample used here as a stand-in for bank data."
+    ],
+    "risks": [
+      "Uses age (protected characteristic under the Equality Act 2010); personal status and sex (sex is a protected characteristic); foreign-worker status (potential proxy for nationality / race) as a direct input. Requires a documented justification and fairness testing before use in customer decisions.",
+      "Documentation last reviewed 2022-11 (4.0 years ago): out of date.",
+      "Explainability risk: adverse-action reasons are hard to give to declined customers."
+    ]
+  }
+}
