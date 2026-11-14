@@ -20,16 +20,25 @@ When Claude is enabled, it receives only facts and numbers already computed, and
 **Reproducibility and audit trail.** Fixed random seeds; a fixed, committed train/test split; source-file SHA-256 hashes in the inventory; R version and run time recorded with the legacy outputs; LLM responses cached. Every run, approval, rejection and invalidation is appended to `outputs/audit_log.jsonl`, with who, when and what.
 
 **Fairness.** We checked which demographic fields exist before testing anything.
-- **Age:** all three models approve under-25s far less often (approval-rate ratios of 0.19-0.55 against the "25 and over" group), and two models use age directly as an input. We flag this for justification instead of "fixing" it automatically: age can be a legitimate credit factor, but it's a protected characteristic under the Equality Act 2010, and its use needs a documented rationale.
+
+- **Age:** all three models approve under-25s far less often (approval-rate ratios of 0.19-0.55 against the "25 and over" group), and all three use age directly as an input. We flag this for justification instead of "fixing" it automatically: age can be a legitimate credit factor, but it's a protected characteristic under the Equality Act 2010, and its use needs a documented rationale.
+
 - **Sex:** the dataset can't separate sex from marital status, so we **do not claim** a sex fairness test. We report by the combined field, with that caveat.
+
 - **Foreign worker:** only 9 people in the test set, so results are marked low-confidence.
+
 - The metrics used (approval-rate ratio with a 0.8 screen, equal-opportunity gap) are screening heuristics, not legal determinations.
 
 **Limitations.**
+
 - The data is small, old, non-UK and oversampled for defaults (30% default rate). Results show the method, not a real portfolio.
+
 - Stability between train and test comes from the same period. Drift over time is simulated in the Monitor stage, and outcomes are only known because it's a simulation.
+
 - The SAS model can't be executed, so it is documented but not validated (shown as "NOT VALIDATED", not silently skipped).
+
 - The rule-based narrative is generic. The Claude narrative can be wrong and must be reviewed.
+
 - The business-impact figures rely on an assumed 5-day human review time.
 
 **Safeguards and what we do not claim.** The factory produces evidence for an independent validator; it does not replace one. Producing documentation or a validation report **does not demonstrate compliance with PRA SS1/23**. Thresholds are configurable and visible. The prototype runs locally, with no cloud services and no data leaving the machine (except optional Claude API calls, which contain only aggregate results and code).
