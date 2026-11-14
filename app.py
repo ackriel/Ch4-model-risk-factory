@@ -17,11 +17,17 @@ import streamlit.components.v1 as components
 from agents import discover, document, monitor, redevelop, validate
 from core import config, data, impact, llm, pipeline, portfolio, state
 
-st.set_page_config(page_title="Model Risk Factory", page_icon="🏦", layout="wide")
+st.set_page_config(page_title="Model Risk Factory", page_icon=":material/monitoring:", layout="wide")
 
 st.markdown("""
 <style>
-  .block-container {padding-top: 1.6rem;}
+  .block-container {padding-top: 1.4rem; max-width: 1400px;}
+  [data-testid="stMetric"] {background: #F4F6F9; border: 1px solid #E1E6EC; border-radius: 8px; padding: 12px 16px;}
+  [data-testid="stMetricLabel"] p {font-size: .82rem; color: #5B6B7C; font-weight: 600; text-transform: uppercase; letter-spacing: .03em;}
+  [data-testid="stSidebar"] {border-right: 1px solid #E1E6EC;}
+  .brand {font-size: 1.35rem !important; font-weight: 700; color: #0B2545; margin: 0;}
+  .brand-sub {font-size: .8rem; color: #5B6B7C; margin: 2px 0 14px;}
+  .side-label {font-size: .72rem; font-weight: 700; color: #5B6B7C; text-transform: uppercase; letter-spacing: .06em; margin: 10px 0 4px;}
   .mrf-header {background: #0b2545; color: #fff; padding: 18px 24px; border-radius: 8px; margin-bottom: 18px;}
   .mrf-header h1 {color: #fff; font-size: 1.6rem; margin: 0;}
   .mrf-header p {margin: 2px 0 0; opacity: .8; font-size: .9rem;}
@@ -53,14 +59,15 @@ def read_json(path):
 
 # ---------------------------------------------------------------- sidebar
 with st.sidebar:
-    st.markdown("### 🏦 Model Risk Factory")
-    st.caption("Fictional UK bank · prototype")
+    st.markdown('<p class="brand">Model Risk Factory</p><p class="brand-sub">Model governance workbench · fictional UK bank</p>',
+                unsafe_allow_html=True)
     reviewer = st.text_input("Reviewer name (for approvals)", value=st.session_state.get("reviewer", ""))
     st.session_state["reviewer"] = reviewer
-    page = st.radio("Navigate", ["Overview", "Estate health", "Model inventory", "Documentation", "Redevelopment",
+    st.markdown('<p class="side-label">Navigate</p>', unsafe_allow_html=True)
+    page = st.radio("Navigate", label_visibility="collapsed", options=["Overview", "Estate health", "Model inventory", "Documentation", "Redevelopment",
                                  "Validation", "Monitoring", "Approvals & audit trail"])
     st.divider()
-    st.markdown("**Pipeline status**")
+    st.markdown('<p class="side-label">Pipeline status</p>', unsafe_allow_html=True)
     s_now = state.load()
     for s in config.PIPELINE_STAGES:
         stt = s_now["stages"][s]["status"]
@@ -153,8 +160,10 @@ if page == "Overview":
         for mid, v in val_sum["models"].items():
             m = next(x for x in inv["models"] if x["model_id"] == mid)
             rows.append({"Model": mid, "Name": m["model_name"], "Language": m["language"],
-                         "RAG": v["rag"], "Test AUC": v.get("test_auc"), "Score PSI": v.get("score_psi"),
-                         "Findings": v.get("findings")})
+                         "RAG": v["rag"],
+                         "Test AUC": f"{v['test_auc']:.3f}" if v.get("test_auc") is not None else "–",
+                         "Score PSI": f"{v['score_psi']:.3f}" if v.get("score_psi") is not None else "–",
+                         "Findings": str(v["findings"]) if v.get("findings") is not None else "–"})
         st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
 
     st.subheader("Business impact (estimate)")

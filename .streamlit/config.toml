@@ -1,0 +1,13 @@
+# Dashboard look and behaviour (read automatically by `streamlit run app.py`)
+[theme]
+base = "light"
+primaryColor = "#0B2545"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F4F6F9"
+textColor = "#1C2733"
+
+[client]
+toolbarMode = "minimal"
+
+[browser]
+gatherUsageStats = false
